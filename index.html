@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Трекер расходов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="media/logo_tab.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="media/logo.png" class="logo">
+        <nav class="navigation">
+            <ul class="nav-buttons">
+                <li><button>Лимит месяца</button></li>
+                <li><button>Добавить доход</button></li>
+                <li><button>Добавить расход</button></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="log-section">
+            <h2>Журнал расходов/доходов</h2>
+            <p class="limit-message">Лимит в этом месяце: 4765/25000₽</p>
+            <label class="log-date">
+                Выберите дату:
+                <input type="date" class="date-picker" value="2025-10-10">
+            </label>
+            <div class="expense-record">
+                <p class="record-info"><b>Описание расхода:</b> Проезд на метро</p>
+                <p class="record-info"><b>Категория:</b> Транспорт</p>
+                <p class="record-info"><b>Сумма:</b> 43.00₽</p>
+                <p class="record-info"><b>время:</b> 20:43</p>
+                <button class="record-delete-button">Удалить</button>
+            </div>
+            <div class="expense-record">
+                <p class="record-info"><b>Описание расхода:</b> YouTube Premium</p>
+                <p class="record-info"><b>Категория:</b> Онлайн-покупки</p>
+                <p class="record-info"><b>Сумма:</b> 300.00₽</p>
+                <p class="record-info"><b>время:</b> 21:04</p>
+                <button class="record-delete-button">Удалить</button>
+            </div>
+            <div class="earning-record">
+                <p class="record-info"><b>Описание дохода:</b> Продажа меди</p>
+                <p class="record-info"><b>Сумма:</b> 15000.00₽</p>
+                <p class="record-info"><b>время:</b> 12:43</p>
+                <button class="record-delete-button">Удалить</button>
+            </div>
+        </section>
+        <section class="chart-section">
+            <h2>Диаграмма по категориям</h2>
+            <div class="filters-row">
+                <label class="chart-filter-start-date">
+                    Начальная дата:
+                    <input type="date" value="2025-08-07" class="date-picker">
+                </label>
+                <label class="chart-filter-end-date">
+                    Конечная дата:
+                    <input type="date" value="2025-08-19" class="date-picker">
+                </label>
+                <label class="chart-filter-category">
+                    Категория
+                    <select class="form-input">
+                        <option value="">Выберите категорию</option>
+                        <option value="products" selected>Продукты</option>
+                        <option value="cafes_restaurants">Кафе и рестораны</option>
+                        <option value="transport">Транспорт</option>
+                        <option value="pharmacy_medicine">Аптека и медицина</option>
+                        <option value="clothing_shoes">Одежда и обувь</option>
+                        <option value="utilities">Коммунальные услуги</option>
+                        <option value="online_shopping">Онлайн-покупки</option>
+                        <option value="subscriptions">Подписки</option>
+                        <option value="electronics">Электроника</option>
+                        <option value="entertainment">Развлечения</option>
+                        <option value="earning">Доходы</option>
+                    </select>
+                </label>
+            </div>
+            <div class="chart-field">
+                <div class="chart-container">
+                    <div class="y-labels">
+                        <span>0₽</span>
+                        <span>1000₽</span>
+                        <span>2000₽</span>
+                        <span>3000₽</span>
+                        <span>4000₽</span>
+                        <span>5000₽</span>
+                        <span>6000₽</span>
+                        <span>7000₽</span>
+                        <span>8000₽</span>
+                        <span>9000₽</span>
+                        <span>10000₽</span>
+                    </div>
+                    <div class="chart">
+                        <div class="bar" style="height: 4.5%;"></div>
+                        <div class="bar" style="height: 6.5%;"></div>
+                        <div class="bar" style="height: 0%;"></div>
+                        <div class="bar" style="height: 24.5%;"></div>
+                        <div class="bar" style="height: 2.75%;"></div>
+                        <div class="bar" style="height: 4.5%;"></div>
+                        <div class="bar" style="height: 2.75%;"></div>
+                        <div class="bar" style="height: 11.5%;"></div>
+                        <div class="bar" style="height: 91.5%;"></div>
+                        <div class="bar" style="height: 0%;"></div>
+                        <div class="bar" style="height: 0%;"></div>
+                        <div class="bar" style="height: 2.75%;"></div>
+                        <div class="bar" style="height: 4.5%;"></div>
+                        <div class="x-labels">
+                            <span>07.08</span>
+                            <span>08.08</span>
+                            <span>09.08</span>
+                            <span>10.08</span>
+                            <span>11.08</span>
+                            <span>12.08</span>
+                            <span>13.08</span>
+                            <span>14.08</span>
+                            <span>15.08</span>
+                            <span>16.08</span>
+                            <span>17.08</span>
+                            <span>18.08</span>
+                            <span>19.08</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="modal-overlay-expense hidden">
+            <div class="expense-add-container">
+                <h2>Добавить расход</h2>
+                <form class="expense-add-form">
+                    <label class="form-label">
+                        Сумма (₽)
+                        <input type="number" class="form-input" placeholder="Например: 150" min="0">
+                    </label>
+                    <label class="form-label">
+                        Дата и время расхода
+                        <input type="datetime-local" class="form-input">
+                    </label>
+                    <label class="form-label">
+                        Описание (до 40 символов)
+                        <input type="text" class="form-input" name="description" maxlength="40" placeholder="Кратко опишите расход">
+                    </label>
+                    <label class="form-label">
+                        Категория
+                        <select class="form-input">
+                            <option value="">Выберите категорию</option>
+                            <option value="products">Продукты</option>
+                            <option value="cafes_restaurants">Кафе и рестораны</option>
+                            <option value="transport">Транспорт</option>
+                            <option value="pharmacy_medicine">Аптека и медицина</option>
+                            <option value="clothing_shoes">Одежда и обувь</option>
+                            <option value="utilities">Коммунальные услуги</option>
+                            <option value="online_shopping">Онлайн-покупки</option>
+                            <option value="subscriptions">Подписки</option>
+                            <option value="electronics">Электроника</option>
+                            <option value="entertainment">Развлечения</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="form-button">Добавить</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-overlay-earning hidden">
+            <div class="earning-add-container">
+                <h2>Добавить доход</h2>
+                <form class="earning-add-form">
+                    <label class="form-label">
+                        Сумма (₽)
+                        <input type="number" class="form-input" placeholder="Например: 150" min="0">
+                    </label>
+                    <label class="form-label">
+                        Дата и время дохода
+                        <input type="datetime-local" class="form-input">
+                    </label>
+                    <label class="form-label">
+                        Описание (до 40 символов)
+                        <input type="text" class="form-input" name="description" maxlength="40" placeholder="Кратко опишите доход">
+                    </label>
+                    <button type="submit" class="form-button">Добавить</button>
+                </form>
+            </div>
+        </div>
+        <div class="modal-overlay-limit hidden">
+            <div class="limit-add-container">
+                <h2><b>Добавить лимит</b><br>(октябрь 2025)</h2>
+                <form class="limit-add-form">
+                    <label class="form-label">
+                        Сумма (₽)
+                        <input type="number" class="form-input" placeholder="Например: 25000" min="0">
+                    </label>
+                    <button type="submit" class="form-button">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-buttons button');
+
+            const expenseModal = document.querySelector('.modal-overlay-expense');
+            const earningModal = document.querySelector('.modal-overlay-earning');
+            const limitModal = document.querySelector('.modal-overlay-limit');
+
+            const modalsMap = {
+                'Добавить расход': expenseModal,
+                'Добавить доход': earningModal,
+                'Лимит месяца': limitModal
+            };
+
+            const openModal = (modal) => {
+                modal.classList.remove('hidden');
+            };
+
+            const closeModal = (modal) => {
+                modal.classList.add('hidden');
+            };
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const modal = modalsMap[btn.textContent];
+                    if (modal) openModal(modal);
+                });
+            });
+
+            [expenseModal, earningModal, limitModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.expense-add-form, .earning-add-form, .limit-add-form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const modal = form.closest('.modal-overlay-expense, .modal-overlay-earning, .modal-overlay-limit');
+                    closeModal(modal);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

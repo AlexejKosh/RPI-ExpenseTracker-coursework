@@ -1,0 +1,364 @@
+html, body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  min-width: 1280px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
+  background-color: #EAECFF;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-buttons button {
+  background-color: #4A90E2;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-buttons button:hover {
+  background-color: #357ABD;
+}
+
+main {
+  padding: 30px;
+}
+
+.log-section {
+  width: 410px;
+  margin: 0 auto;
+}
+.chart-section h2,
+.log-section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4A90E2;
+  text-align: center;
+  margin: 0;
+}
+
+.limit-message {
+  font-size: 14px;
+  color: #009400;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.log-date {
+  font-size: 14px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.log-date input.date-picker {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 14px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+
+.expense-record,
+.earning-record {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  border: 1px solid #9A9A9A;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+.earning-record {
+  background-color: #E6FFD8;
+  border-color: #A8FF77;
+}
+
+.expense-record {
+  background-color: #F6F6F6;
+}
+
+.record-info {
+  font-size: 14px;
+  margin: 0;
+}
+
+.log-section .record-delete-button {
+  background-color: #FF4545;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.log-section .record-delete-button:hover {
+  background-color: #ce0909;
+}
+
+.chart-section {
+  width: 100%;
+}
+
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  width: 100%;
+  margin: 30px auto;
+  box-sizing: border-box;
+}
+
+.filters-row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  width: 100%;
+}
+
+.filters-row input.date-picker {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 14px;
+  border: 1px solid #9A9A9A;
+  border-radius: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+
+.filters-row select.form-input {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 14px;
+  border: 1px solid #9A9A9A;
+  border-radius: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+
+.chart-field {
+  width: 100%;
+  height: 500px;
+  background-color: #EAECFF;
+  padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.chart-container {
+  width: 100%;
+  height: calc(100% - 17px);
+  display: flex;
+}
+
+.y-labels {
+  text-align: right;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  margin-right: 5px;
+  margin-top: -6px;
+  height: calc(100% + 12px);
+}
+
+.y-labels span {
+  font-size: 12px;
+  color: #000000;
+}
+
+.chart {
+  flex: 1;
+  background-color: #FFFFFF;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.chart::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, #B7B7B7 0 1px, transparent 1px 10%);
+  z-index: 0;
+}
+
+.bar {
+  width: calc((100% - 12 * 10px) / 13);
+  background-color: #84BEFF;
+  z-index: 1;
+  display: inline-block;
+}
+
+.x-labels {
+  position: absolute;
+  bottom: -17px;
+  left: calc(100% / (13*2) - 12px);
+  width: calc(100% - (100% / 13 - 17px));
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.x-labels span {
+  font-size: 12px;
+  color: #000;
+}
+.modal-overlay-earning,
+.modal-overlay-limit,
+.modal-overlay-expense {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+}
+
+.earning-add-container,
+.limit-add-container,
+.expense-add-container {
+    margin: auto;
+    margin-top: 180px;
+    width: 500px;
+    box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.expense-add-container {
+    background-color: #EAECFF;
+}
+
+.limit-add-container {
+    background-color: #FFFFFF;
+}
+
+.earning-add-container {
+    background-color: #DFFEE5;
+}
+
+.earning-add-container h2,
+.limit-add-container h2,
+.expense-add-container h2 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 30px 0;
+}
+
+.limit-add-container h2 {
+  font-weight: normal;
+}
+
+.form-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  width: 100%;
+}
+
+.expense-add-container .form-label,
+.expense-add-container h2 {
+  color: #4A90E2;
+}
+
+.earning-add-container .form-label,
+.earning-add-container h2 {
+  color: #00A11D;
+}
+
+.limit-add-container .form-label,
+.limit-add-container h2 {
+  color: #2D527E;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 13px;
+  font-size: 14px;
+  border-radius: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  color: #808080;
+  margin-bottom: 15px;
+}
+
+.expense-add-container .form-input {
+  border: 1px solid #4A90E2;
+  background-color: #EAECFF;
+}
+
+.limit-add-container .form-input {
+  border: 1px solid #2D527E;
+  background-color: #FFFFFF;
+}
+
+.earning-add-container .form-input {
+  border: 1px solid #00A11D;
+  background-color: #DFFEE5;
+}
+
+.form-button {
+  margin-top: 18px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.expense-add-container .form-button {
+  background-color: #4A90E2;
+}
+
+.limit-add-container .form-button {
+  background-color: #2D527E;
+}
+
+.earning-add-container .form-button {
+  background-color: #00A11D;
+}
+
+.expense-add-container .form-button:hover {
+  background-color: #357ABD;
+}
+
+.hidden {
+  display: none;
+}

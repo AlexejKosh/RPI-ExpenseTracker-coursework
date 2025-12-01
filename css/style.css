@@ -39,32 +39,34 @@ html, body {
 }
 
 main {
-  padding: 30px;
+  padding: 50px;
 }
 
 .log-section {
-  width: 410px;
-  margin: 0 auto;
+  width: 100%;
+  margin-bottom: 50px;
 }
 .chart-section h2,
 .log-section h2 {
   font-size: 28px;
   font-weight: bold;
   color: #4A90E2;
-  text-align: center;
   margin: 0;
+}
+
+.chart-section h2 {
+  text-align: center;
 }
 
 .limit-message {
   font-size: 14px;
   color: #009400;
-  text-align: center;
   margin: 15px 0;
 }
 
 .log-date {
   font-size: 14px;
-  width: 100%;
+  width: 410px;
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
@@ -80,17 +82,24 @@ main {
   box-sizing: border-box;
 }
 
+.records-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+}
+
 .expense-record,
 .earning-record {
-  width: 100%;
+  width: 410px;
   padding: 20px;
-  margin-bottom: 30px;
+  min-height: 200px;
   border-radius: 10px;
   border: 1px solid #9A9A9A;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   box-sizing: border-box;
-  gap: 20px;
 }
 
 .earning-record {
@@ -108,6 +117,7 @@ main {
 }
 
 .log-section .record-delete-button {
+  margin-top: auto;
   background-color: #FF4545;
   color: white;
   font-size: 14px;
@@ -209,7 +219,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(to bottom, #B7B7B7 0 1px, transparent 1px 10%);
+  background: repeating-linear-gradient(to bottom, #B7B7B7 0 2px, transparent 1px 10%);
   z-index: 0;
 }
 

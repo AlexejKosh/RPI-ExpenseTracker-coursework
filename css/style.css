@@ -82,7 +82,7 @@ main {
   box-sizing: border-box;
 }
 
-.records-container {
+.records-board {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;

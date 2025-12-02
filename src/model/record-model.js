@@ -9,6 +9,19 @@ export default class RecordModel {
     return this.#boardRecords;
   }
 
+  addRecord(description, amount, category, datetime) {
+    const newRecord = {
+      description: description,
+      amount: amount,
+      category: category,
+      datetime: datetime,
+      id: generateID()
+    };
+    this.#boardRecords.push(newRecord);
+    this._notifyObservers();
+    return newRecord;
+  }
+
   deleteRecord(record) {
     const leftRecords = this.#boardRecords.filter(r => r.id !== record.id);
     this.#boardRecords = leftRecords;

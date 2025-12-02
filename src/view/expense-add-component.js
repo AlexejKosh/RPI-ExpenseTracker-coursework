@@ -1,6 +1,14 @@
 import { AbstractComponent } from '../framework/view/abstract-component.js';
+import { CategoryLabel } from '../const.js';
 
 function ExpenseAddComponentTemplate() {
+  const options = Object.entries(CategoryLabel)
+    .slice(0, -1)
+    .map(([value, label]) => {
+      return `<option value="${value}">${label}</option>`;
+    })
+    .join('');
+
   return (
     `<div class="modal-overlay-expense hidden">
         <div class="expense-add-container">
@@ -8,30 +16,21 @@ function ExpenseAddComponentTemplate() {
             <form class="expense-add-form">
                 <label class="form-label">
                     Сумма (₽)
-                    <input type="number" class="form-input" placeholder="Например: 150" min="0">
+                    <input type="number" id="amount-field" class="form-input" placeholder="Например: 150" min="0" required>
                 </label>
                 <label class="form-label">
                     Дата и время расхода
-                    <input type="datetime-local" class="form-input">
+                    <input type="datetime-local" id="datetime-field" class="form-input" required>
                 </label>
                 <label class="form-label">
                     Описание (до 40 символов)
-                    <input type="text" class="form-input" name="description" maxlength="40" placeholder="Кратко опишите расход">
+                    <input type="text" id="description-field" class="form-input" maxlength="40" placeholder="Кратко опишите расход" required>
                 </label>
                 <label class="form-label">
                     Категория
-                    <select class="form-input">
+                    <select id="category-field" class="form-input" required>
                         <option value="">Выберите категорию</option>
-                        <option value="products">Продукты</option>
-                        <option value="cafes_restaurants">Кафе и рестораны</option>
-                        <option value="transport">Транспорт</option>
-                        <option value="pharmacy_medicine">Аптека и медицина</option>
-                        <option value="clothing_shoes">Одежда и обувь</option>
-                        <option value="utilities">Коммунальные услуги</option>
-                        <option value="online_shopping">Онлайн-покупки</option>
-                        <option value="subscriptions">Подписки</option>
-                        <option value="electronics">Электроника</option>
-                        <option value="entertainment">Развлечения</option>
+                        ${options}
                     </select>
                 </label>
                 <button type="submit" class="form-button">Добавить</button>
@@ -42,8 +41,11 @@ function ExpenseAddComponentTemplate() {
 }
 
 export default class ExpenseAddComponent extends AbstractComponent{
-  constructor() {
+  #handleClick = null;
+
+  constructor({onClick}) {
     super();
+    this.#handleClick = onClick;
 
     this.element.addEventListener('click', (e) => {
       if (e.target === this.element) {
@@ -53,6 +55,7 @@ export default class ExpenseAddComponent extends AbstractComponent{
 
     this.element.addEventListener('submit', (e) => {
       e.preventDefault();
+      this.#handleClick();
       this.element.classList.add('hidden');
     });
   }

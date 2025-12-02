@@ -1,45 +1,62 @@
 import ChartFieldComponent from '../view/chart-field-component.js';
 import { render } from '../framework/render.js';
 
-export default class RecordsLogPresenter {
+export default class ChartPresenter {
   #boardContainer = null;
   #startDate = null;
   #endDate = null;
   #currentCategory = null;
-  #chartModel = null;
-  #chartFieldComponent = new ChartFieldComponent();
+  #recordModel = null;
+  #chartFieldComponent = null;
 
-  constructor({ boardContainer, chartModel }) {
+  constructor({ boardContainer, recordModel }) {
     this.#boardContainer = boardContainer;
-    this.#chartModel = chartModel;
-    this.#startDate = boardContainer.querySelector('.chart-filter-start-date .date-picker');
-    this.#endDate = boardContainer.querySelector('.chart-filter-end-date .date-picker');
-    this.#currentCategory = boardContainer.querySelector('chart-filter-category .form-input');
-    this.#chartModel.addObserver(() => this.#handleModelChange(
-        this.#startDate,
-        this.#endDate,
-        this.#currentCategory
-    ));
+    this.#recordModel = recordModel;
+    this.#getData();
+    this.#chartFieldComponent = new ChartFieldComponent(
+      this.#startDate,
+      this.#endDate,
+      this.#currentCategory,
+      this.records
+    );
+    this.#recordModel.addObserver(() => this.#handleModelChange());
   }
 
   init() {
     this.#renderBoard();
   }
 
-  #handleModelChange(startDate, endDate, currentCategory) {
+  #handleModelChange() {
     this.#clearBoard();
     this.#renderBoard();
   }
 
   #clearBoard() {
-    this.#chartFieldComponent.element.innerHTML = '';
+    this.#boardContainer.innerHTML = '';
   }
 
-  #renderBoard(date) {
+  #renderBoard() {
+    this.#getData();
+    this.#chartFieldComponent = new ChartFieldComponent(
+      this.#startDate,
+      this.#endDate,
+      this.#currentCategory,
+      this.records
+    );
     render(this.#chartFieldComponent, this.#boardContainer);
   }
 
+  #getData() {
+    this.#startDate = document.querySelector('#start-date-filter');
+    this.#endDate = document.querySelector('#end-date-filter');
+    this.#currentCategory = document.querySelector('#category-filter');
+  }
+
   chartUpdate() {
-    
+    this.#handleModelChange();
+  }
+
+  get records() {
+    return this.#recordModel.records;
   }
 }

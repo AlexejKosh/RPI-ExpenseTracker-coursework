@@ -14,15 +14,15 @@ function ChartComponentTemplate() {
         <div class="filters-row">
             <label class="chart-filter-start-date">
                 Начальная дата:
-                <input type="date" value="" class="date-picker">
+                <input type="date" id="start-date-filter" value="" class="date-picker">
             </label>
             <label class="chart-filter-end-date">
                 Конечная дата:
-                <input type="date" value="" class="date-picker">
+                <input type="date" id="end-date-filter" value="" class="date-picker">
             </label>
             <label class="chart-filter-category">
                 Категория
-                <select class="form-input">
+                <select id="category-filter" class="form-input">
                     <option value="">Выберите категорию</option>
                     ${options}
                 </select>

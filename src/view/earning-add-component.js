@@ -8,15 +8,15 @@ function EarningAddComponentTemplate() {
             <form class="earning-add-form">
                 <label class="form-label">
                     Сумма (₽)
-                    <input type="number" class="form-input" placeholder="Например: 150" min="0">
+                    <input type="number" id="amount-field" class="form-input" placeholder="Например: 150" min="0" required>
                 </label>
                 <label class="form-label">
                     Дата и время дохода
-                    <input type="datetime-local" class="form-input">
+                    <input type="datetime-local" id="datetime-field" class="form-input" required>
                 </label>
                 <label class="form-label">
                     Описание (до 40 символов)
-                    <input type="text" class="form-input" name="description" maxlength="40" placeholder="Кратко опишите доход">
+                    <input type="text" id="description-field" class="form-input" name="description" maxlength="40" placeholder="Кратко опишите доход" required>
                 </label>
                 <button type="submit" class="form-button">Добавить</button>
             </form>
@@ -26,9 +26,11 @@ function EarningAddComponentTemplate() {
 }
 
 export default class EarningAddComponent extends AbstractComponent{
+  #handleClick = null;
 
-  constructor() {
+  constructor({onClick}) {
     super();
+    this.#handleClick = onClick;
 
     this.element.addEventListener('click', (e) => {
       if (e.target === this.element) {
@@ -38,6 +40,7 @@ export default class EarningAddComponent extends AbstractComponent{
 
     this.element.addEventListener('submit', (e) => {
       e.preventDefault();
+      this.#handleClick();
       this.element.classList.add('hidden');
     });
   }

@@ -46,22 +46,25 @@ main {
   width: 100%;
   margin-bottom: 50px;
 }
+
 .chart-section h2,
 .log-section h2 {
   font-size: 28px;
   font-weight: bold;
   color: #4A90E2;
   margin: 0;
-}
-
-.chart-section h2 {
-  text-align: center;
+  margin-bottom: 20px;
 }
 
 .limit-message {
   font-size: 14px;
   color: #009400;
-  margin: 15px 0;
+  margin: 0;
+  width: 100%;
+}
+
+.red {
+  color: #ff1b1b;
 }
 
 .log-date {
@@ -69,7 +72,7 @@ main {
   width: 410px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .log-date input.date-picker {
@@ -93,7 +96,7 @@ main {
 .earning-record {
   width: 410px;
   padding: 20px;
-  min-height: 200px;
+  min-height: 220px;
   border-radius: 10px;
   border: 1px solid #9A9A9A;
   display: flex;
@@ -135,7 +138,7 @@ main {
 }
 
 .chart-section {
-  width: 100%;
+  width: 70%;
 }
 
 .filters-row {
@@ -178,14 +181,16 @@ main {
   width: 100%;
   height: 500px;
   background-color: #EAECFF;
-  padding: 30px;
+  padding: 40px;
   box-sizing: border-box;
   display: flex;
+  border-radius: 10px;
+  border: 1px solid #ccd1fd;
 }
 
 .chart-container {
   width: 100%;
-  height: calc(100% - 17px);
+  height: calc(100% - 35px);
   display: flex;
 }
 
@@ -224,26 +229,35 @@ main {
 }
 
 .bar {
-  width: calc((100% - 12 * 10px) / 13);
-  background-color: #84BEFF;
-  z-index: 1;
-  display: inline-block;
-}
-
-.x-labels {
-  position: absolute;
-  bottom: -17px;
-  left: calc(100% / (13*2) - 12px);
-  width: calc(100% - (100% / 13 - 17px));
+  position: relative;
   display: flex;
-  margin: 0 auto;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: #84BEFF;
+  border-radius: 7px 7px 0 0;
+  z-index: 1;
+  width: 100%;
 }
 
-.x-labels span {
-  font-size: 12px;
+.bar .x-label {
+  position: absolute;
+  bottom: -50px;
+  font-size: 11px;
   color: #000;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  white-space: pre-line;
+  pointer-events: none;
 }
+
+.chart-empty {
+  text-align: center;
+  margin: 40px 0;
+  width: 100%;
+  font-size: 24px;
+  color: #888;
+}
+
 .modal-overlay-earning,
 .modal-overlay-limit,
 .modal-overlay-expense {

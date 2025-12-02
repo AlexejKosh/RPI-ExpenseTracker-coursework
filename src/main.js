@@ -8,7 +8,6 @@ import LimitAddComponent from './view/limit-add-component.js';
 import RecordsLogPresenter from './presenter/records-log-presenter.js';
 import ChartPresenter from './presenter/chart-presenter.js'
 import RecordModel from './model/record-model.js';
-import ChartModel from './model/chart-model.js';
 import {render, RenderPosition} from './framework/render.js';
 
 const bodyContainer = document.querySelector('.app');
@@ -20,7 +19,20 @@ const chartContainer = new ChartComponent({
     onChange: handleChartUpdate
 });
 
-render(new HeaderComponent(), bodyContainer, RenderPosition.AFTERBEGIN);
+render(new ExpenseAddComponent({
+  onClick: handleAddExpense
+}), mainContainer.element);
+render(new EarningAddComponent({
+  onClick: handleAddEarning
+}), mainContainer.element);
+const limitAddComponent = new LimitAddComponent({
+  onClick: handleAddLimit
+});
+render(limitAddComponent, mainContainer.element);
+
+render(new HeaderComponent({
+  limitModal: limitAddComponent
+}), bodyContainer, RenderPosition.AFTERBEGIN)
 render(mainContainer, bodyContainer)
 render(logContainer, mainContainer.element);
 
@@ -31,23 +43,30 @@ const recordsLogPresenter = new RecordsLogPresenter({
 });
 
 render(chartContainer, mainContainer.element)
-const chartModel = new ChartModel();
 const chartPresenter = new ChartPresenter({
   boardContainer: chartContainer.element.querySelector('.chart-field'),
-  chartModel
+  recordModel
 });
 
-render(new ExpenseAddComponent(), mainContainer.element)
-render(new EarningAddComponent(), mainContainer.element)
-render(new LimitAddComponent(), mainContainer.element)
+recordsLogPresenter.init();
+chartPresenter.init();
 
 function handleLogDateChange() {
   recordsLogPresenter.changeLogByDate();
 }
 
+function handleAddExpense() {
+  recordsLogPresenter.addExpense();
+}
+
+function handleAddEarning() {
+  recordsLogPresenter.addEarning();
+}
+
+function handleAddLimit() {
+  recordsLogPresenter.addLimit();
+}
+
 function handleChartUpdate() {
   chartPresenter.chartUpdate();
 }
-
-recordsLogPresenter.init();
-chartPresenter.init();

@@ -15,29 +15,23 @@ function HeaderComponentTemplate() {
   );
 }
 
-export default class HeaderComponent extends AbstractComponent{
-  
-  constructor() {
+export default class HeaderComponent extends AbstractComponent {
+
+  constructor({ limitModal }) {
     super();
     const navButtons = this.element.querySelectorAll('.nav-buttons button');
-
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const modal_text = btn.textContent;
-        var modal;
-        switch (modal_text) {
+        switch (btn.textContent) {
           case 'Добавить расход':
-            modal = document.querySelector('.modal-overlay-expense');
+            document.querySelector('.modal-overlay-expense').classList.remove('hidden');
             break;
           case 'Добавить доход':
-            modal = document.querySelector('.modal-overlay-earning');
+            document.querySelector('.modal-overlay-earning').classList.remove('hidden');
             break;
           case 'Лимит месяца':
-            modal = document.querySelector('.modal-overlay-limit');
+            limitModal.show();
             break;
-        }
-        if (modal) {
-          modal.classList.remove('hidden');
         }
       });
     });

@@ -1,15 +1,21 @@
-import { records } from '../mock/records.js';
 import { generateID } from '../utils.js';
+import { UpdateType, UserAction } from '../const.js';
+import Observable from '../framework/observable.js';
 
-export default class RecordModel {
-  #boardRecords = records;
-  #observers = [];
+export default class RecordModel extends Observable {
+  #boardRecords = [];
+  #recordsApiService = null;
+
+  constructor({recordsApiService}) {
+    super();
+    this.#recordsApiService = recordsApiService;
+  }
 
   get records() {
     return this.#boardRecords;
   }
 
-  addRecord(description, amount, category, datetime) {
+  async addRecord(description, amount, category, datetime) {
     const newRecord = {
       description: description,
       amount: amount,
@@ -17,26 +23,36 @@ export default class RecordModel {
       datetime: datetime,
       id: generateID()
     };
-    this.#boardRecords.push(newRecord);
-    this._notifyObservers();
-    return newRecord;
+    try {
+      const createdRecord = await this.#recordsApiService.addRecord(newRecord);
+      this.#boardRecords.push(createdRecord);
+      this._notify(UserAction.ADD_RECORD, createdRecord);
+      return newRecord;
+    } catch (err) {
+      console.error('Ошибка при добавлении записи на сервер:', err);
+      throw err;
+    }
   }
 
-  deleteRecord(record) {
-    const leftRecords = this.#boardRecords.filter(r => r.id !== record.id);
-    this.#boardRecords = leftRecords;
-    this._notifyObservers();
+  async deleteRecord(recordId) {
+    try {
+      await this.#recordsApiService.deleteRecord(recordId);
+      const leftRecords = this.#boardRecords.filter(r => r.id !== recordId);
+      this.#boardRecords = leftRecords;
+      this._notify(UserAction.DELETE_RECORD, recordId);
+    } catch {
+      console.error('Ошибка при удалении записи с сервера:', err);
+      throw err;
+    }
   }
 
-  addObserver(observer) {
-    this.#observers.push(observer);
-  }
-
-  removeObserver(observer) {
-    this.#observers = this.#observers.filter((obs) => obs !== observer);
-  }
-
-  _notifyObservers() {
-    this.#observers.forEach((observer) => observer());
+  async init() {
+    try {
+      const records = await this.#recordsApiService.records
+      this.#boardRecords = records;
+    } catch(err) {
+      this.#boardRecords = []
+    }
+    this._notify(UpdateType.INIT);
   }
 }

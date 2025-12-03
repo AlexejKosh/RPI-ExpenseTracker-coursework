@@ -41,4 +41,18 @@ const Month = {
   12: 'Декабрь'
 }
 
-export { Category, CategoryLabel, Month };
+const UserAction = {
+  ADD_RECORD: 'ADD_RECORD',
+  DELETE_RECORD: 'DELETE_RECORD',
+  ADD_LIMIT: 'ADD_LIMIT',
+  DELETE_LIMIT: 'DELETE_LIMIT'
+}
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT'
+}
+
+export { Category, CategoryLabel, Month, UserAction, UpdateType };

@@ -8,7 +8,13 @@ import LimitAddComponent from './view/limit-add-component.js';
 import RecordsLogPresenter from './presenter/records-log-presenter.js';
 import ChartPresenter from './presenter/chart-presenter.js'
 import RecordModel from './model/record-model.js';
+import LimitModel from './model/limit-model.js';
+import RecordsApiService from './records-api-services.js';
+import LimitsApiService from './limits-api-services.js';
 import {render, RenderPosition} from './framework/render.js';
+
+const END_POINT_RECORD = 'https://6908b8792d902d0651b17edb.mockapi.io/'
+const END_POINT_LIMIT = 'https://69309754778bbf9e0071f86d.mockapi.io/'
 
 const bodyContainer = document.querySelector('.app');
 const mainContainer = new MainContainerComponent();
@@ -36,10 +42,16 @@ render(new HeaderComponent({
 render(mainContainer, bodyContainer)
 render(logContainer, mainContainer.element);
 
-const recordModel = new RecordModel();
+const recordModel = new RecordModel({
+  recordsApiService: new RecordsApiService(END_POINT_RECORD)
+});
+const limitModel = new LimitModel({
+  limitsApiService: new LimitsApiService(END_POINT_LIMIT)
+});
 const recordsLogPresenter = new RecordsLogPresenter({
   boardContainer: logContainer.element.querySelector('.records-container'),
-  recordModel
+  recordModel,
+  limitModel
 });
 
 render(chartContainer, mainContainer.element)

@@ -29,7 +29,7 @@ export default class RecordComponent extends AbstractComponent{
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleDelete(this.record);
+    this.#handleDelete(this.record.id);
   }
 
   get template() {

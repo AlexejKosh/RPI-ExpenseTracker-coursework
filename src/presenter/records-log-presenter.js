@@ -1,22 +1,21 @@
 import RecordListBoardComponent from '../view/record-list-board-component.js';
 import RecordComponent from '../view/record-component.js';
-import { generateID } from '../utils.js';
-import { limits } from '../mock/limits.js';
+import LoadingViewComponent from '../view/loading-view-component.js';
 import { render } from '../framework/render.js';
 
 export default class RecordsLogPresenter {
   #boardContainer = null;
   #recordModel = null;
+  #limitModel = null;
   #currentDate = null;
   #currentLimit = null;
   #currentSummary = null;
-  #limitsList = limits
   #recordsBoardComponent = new RecordListBoardComponent();
-  #boardRecords = [];
 
-  constructor({ boardContainer, recordModel }) {
+  constructor({ boardContainer, recordModel, limitModel }) {
     this.#boardContainer = boardContainer;
     this.#recordModel = recordModel;
+    this.#limitModel = limitModel;
     this.#currentDate = document.querySelector('.log-date .date-picker').value;
     this.#computeSummaryAndLimit(this.#currentDate);
     this.#recordModel.addObserver(() => {
@@ -24,11 +23,25 @@ export default class RecordsLogPresenter {
     });
   }
 
-  init() {
-    this.#boardRecords = [...this.#recordModel.records];
+  async init() {
+    render(this.#recordsBoardComponent, this.#boardContainer);
+
+    const loadingComponent = new LoadingViewComponent();
+    render(loadingComponent, this.#recordsBoardComponent.element);
+
+    try {
+      await this.#recordModel.init();
+      await this.#limitModel.init();
+    } finally {
+      if (loadingComponent.element && loadingComponent.element.parentNode) {
+        loadingComponent.element.remove();
+        loadingComponent.removeElement();
+      }
+    }
+
     const date = document.querySelector('.log-date .date-picker').value;
     this.#computeSummaryAndLimit(date);
-    this.#renderBoard(date, this.#currentSummary, this.#currentLimit);
+    this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
   }
 
   #handleModelChange(date, summary, limit) {
@@ -51,7 +64,7 @@ export default class RecordsLogPresenter {
     }
     this.#currentSummary = summary;
     const [year, month] = date.split('-');
-    const foundLimit = this.#limitsList.find((limit) => limit.year === year && limit.month === month);
+    const foundLimit = this.limits.find((l) => l.year === year && l.month === month);
     this.#currentLimit = foundLimit ? foundLimit.amount : null;
   }
 
@@ -84,7 +97,7 @@ export default class RecordsLogPresenter {
     render(recordComponent, container);
   }
 
-  addExpense() {
+  async addExpense() {
     const form = document.querySelector('.expense-add-form');
 
     const description = form.elements['description-field'].value.trim();
@@ -96,13 +109,17 @@ export default class RecordsLogPresenter {
       return;
     }
 
-    this.#recordModel.addRecord(description, amount, category, datetime.slice(0,10)+' '+datetime.slice(-5));
-    form.reset();
-    this.#computeSummaryAndLimit(this.#currentDate);
-    this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    try {
+      await this.#recordModel.addRecord(description, amount, category, datetime.slice(0,10)+' '+datetime.slice(-5));
+      form.reset();
+      this.#computeSummaryAndLimit(this.#currentDate);
+      this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    } catch (err) {
+      console.error(`Ошибка при добавлении записи: ${err}`);
+    }
   }
 
-  addEarning() {
+  async addEarning() {
     const form = document.querySelector('.earning-add-form');
 
     const description = form.elements['description-field'].value.trim();
@@ -114,41 +131,54 @@ export default class RecordsLogPresenter {
       return;
     }
 
-    this.#recordModel.addRecord(description, amount, category, datetime.slice(0,10)+' '+datetime.slice(-5));
-    form.reset();
-    this.#computeSummaryAndLimit(this.#currentDate);
-    this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    try {
+      this.#recordModel.addRecord(description, amount, category, datetime.slice(0,10)+' '+datetime.slice(-5));
+      form.reset();
+      this.#computeSummaryAndLimit(this.#currentDate);
+      this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    } catch (err) {
+      console.error(`Ошибка при добавлении записи: ${err}`);
+    }
   }
 
-  addLimit() {
+  async addLimit() {
     const year = this.#currentDate.slice(0,4);
     const month = this.#currentDate.slice(5,7);
     const amountElem = document.querySelector('#limit-amount');
     const amountRaw = amountElem ? amountElem.value.trim() : '';
 
-    this.#limitsList = this.#limitsList.filter((l) => !(l.year === year && l.month === month));
+    try {
+      const limitToDelete = this.limits.filter((l) => (l.year === year && l.month === month));
+      if (limitToDelete.length !== 0) {
+        await this.#limitModel.deleteLimit(limitToDelete[0].id);
+      }
+    } catch  (err) {
+      console.error(`Ошибка при удалении лимита: ${err}`);
+      return;
+    }
 
     const amountNum = Number(amountRaw);
     const shouldAdd = amountRaw !== '' && !Number.isNaN(amountNum) && amountNum !== 0;
 
-    if (shouldAdd) {
-      const newLimit = {
-        id: generateID(),
-        year: year,
-        month: month,
-        amount: String(amountNum)
-      };
-
-      this.#limitsList.push(newLimit);
+    try {
+      if (shouldAdd) {
+        await this.#limitModel.addLimit(year, month, String(amountNum));
+      }
+      this.#computeSummaryAndLimit(this.#currentDate);
+      this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    } catch {
+      console.error(`Ошибка при добавлении лимита: ${err}`);
     }
-    this.#computeSummaryAndLimit(this.#currentDate);
-    this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
   }
 
-  deleteRecord(record) {
-    this.#recordModel.deleteRecord(record);
-    this.#computeSummaryAndLimit(this.#currentDate);
-    this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+  async deleteRecord(recordId) {
+    try {
+      await this.#recordModel.deleteRecord(recordId);
+      this.#computeSummaryAndLimit(this.#currentDate);
+      this.#handleModelChange(this.#currentDate, this.#currentSummary, this.#currentLimit);
+    } catch {
+      console.error(`Ошибка при удалении записи: ${err}`);
+    }
   }
 
   changeLogByDate() {
@@ -159,5 +189,9 @@ export default class RecordsLogPresenter {
 
   get records() {
     return this.#recordModel.records;
+  }
+
+  get limits() {
+    return this.#limitModel.limits;
   }
 }
